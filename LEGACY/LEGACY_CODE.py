@@ -7,8 +7,8 @@ from tensorflow import keras
 from sklearn.model_selection import train_test_split
 from keras import layers, models
 
-images = "../ZenVision/dataset"
-walk_through_dir(dataset)
+images = "dataset"
+walk_through_dir(images)
 # images = []
 # classNames = []
 # myList = os.listdir(path)

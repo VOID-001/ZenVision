@@ -3,12 +3,15 @@ import matplotlib.pyplot as plt #Pyplot for pose detection
 import mediapipe as mp
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
+from tensorflow.python import keras
 from sklearn.model_selection import train_test_split
 from keras import layers, models
+import os
+mp_drawing = mp.solutions.drawing_utils
+mp_pose = mp.solutions.pose
 
-images = "../ZenVision/dataset"
-walk_through_dir(dataset)
+#images = "dataset"
+
 # images = []
 # classNames = []
 # myList = os.listdir(path)
@@ -98,72 +101,135 @@ while cv.waitKey(1) < 0:
     # cv.imshow("Landmarks", frame)
     
     #return frame
+    
+########################################## Reading img #############################################################################    
+
+BATCH_SIZE = 32
+IMAGE_SIZE = (224, 224)
+
+# Define the path to your dataset directory
+dataset_dir = r"./dataset"
+
+# Function to walk through a directory
+def walk_through_dir(directory):
+    for dirpath, dirnames, filenames in os.walk(directory):
+        print(f"Found directory: {dirpath}")
+        for file_name in filenames:
+            print(f"\tFound file: {file_name}")
+
+# Now, let's call the function with the correct directory path
+walk_through_dir(dataset_dir)
+
+
+## Setup mediapipe instance
+with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+    while cap.isOpened():
+        ret, frame = cap.read()
+        
+        # Recolor image to RGB
+        image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+        image.flags.writeable = False
+      
+        # Make detection
+        results = pose.process(image)
+    
+        # Recolor back to BGR
+        image.flags.writeable = True
+        image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
+        
+        # Extract landmarks
+        try:
+            landmarks = results.pose_landmarks.landmark
+            print(landmarks)
+        except:
+            pass
+        
+        
+        # Render detections
+        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                                mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
+                                mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
+                                 )               
+        
+        cv.imshow('Mediapipe Feed', image)
+
+        if cv.waitKey(10) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv.destroyAllWindows()
+
+
+
+
+
+
 #################################################TRAINING MODEL####################################################################    
-def create_model(input_shape, num_keypoints):
-    model = models.Sequential()
+# def create_model(input_shape, num_keypoints):
+#     model = models.Sequential()
     
-    # Convolutional layers
-    model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
-    model.add(layers.MaxPooling2D((2, 2)))
-    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-    model.add(layers.MaxPooling2D((2, 2)))
-    model.add(layers.Conv2D(128, (3, 3), activation='relu'))
-    model.add(layers.MaxPooling2D((2, 2)))
+#     # Convolutional layers
+#     model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
+#     model.add(layers.MaxPooling2D((2, 2)))
+#     model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+#     model.add(layers.MaxPooling2D((2, 2)))
+#     model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+#     model.add(layers.MaxPooling2D((2, 2)))
     
-    # Flatten layer
-    model.add(layers.Flatten())
+#     # Flatten layer
+#     model.add(layers.Flatten())
     
-    # Dense layers
-    model.add(layers.Dense(128, activation='relu'))
-    model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(num_keypoints * 2))  # Output layer with (x, y) coordinates for each keypoint
+#     # Dense layers
+#     model.add(layers.Dense(128, activation='relu'))
+#     model.add(layers.Dropout(0.5))
+#     model.add(layers.Dense(num_keypoints * 2))  # Output layer with (x, y) coordinates for each keypoint
     
-    return model
+#     return model
 
-# Define data loading and preprocessing functions
-def load_data():
-    # Load and preprocess your dataset here
-    X_train, y_train = ...
-    X_val, y_val = ...
-    X_test, y_test = ...
-    return X_train, y_train, X_val, y_val, X_test, y_test
+# # Define data loading and preprocessing functions
+# def load_data():
+#     # Load and preprocess your dataset here
+#     X_train, y_train = ...
+#     X_val, y_val = ...
+#     X_test, y_test = ...
+#     return X_train, y_train, X_val, y_val, X_test, y_test
 
-def preprocess_data(X_train, X_val, X_test):
-    # Preprocess your input data here (e.g., normalization)
-    X_train_processed = ...
-    X_val_processed = ...
-    X_test_processed = ...
-    return X_train_processed, X_val_processed, X_test_processed
+# def preprocess_data(X_train, X_val, X_test):
+#     # Preprocess your input data here (e.g., normalization)
+#     X_train_processed = ...
+#     X_val_processed = ...
+#     X_test_processed = ...
+#     return X_train_processed, X_val_processed, X_test_processed
 
-# Define model training function
-def train_model(model, X_train, y_train, X_val, y_val, batch_size=32, epochs=10):
-    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
-    history = model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=batch_size, epochs=epochs)
-    return history
+# # Define model training function
+# def train_model(model, X_train, y_train, X_val, y_val, batch_size=32, epochs=10):
+#     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
+#     history = model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=batch_size, epochs=epochs)
+#     return history
 
-# Main function
-def main():
-    # Load and preprocess data
-    X_train, y_train, X_val, y_val, X_test, y_test = load_data()
-    X_train, X_val, X_test = preprocess_data(X_train, X_val, X_test)
+# # Main function
+# def main():
+#     # Load and preprocess data
+#     X_train, y_train, X_val, y_val, X_test, y_test = load_data()
+#     X_train, X_val, X_test = preprocess_data(X_train, X_val, X_test)
     
-    # Define model parameters
-    input_shape = X_train.shape[1:]
-    num_keypoints = y_train.shape[1] // 2  # Divide by 2 because each keypoint has (x, y) coordinates
+#     # Define model parameters
+#     input_shape = X_train.shape[1:]
+#     num_keypoints = y_train.shape[1] // 2  # Divide by 2 because each keypoint has (x, y) coordinates
     
-    # Create and compile the model
-    model = create_model(input_shape, num_keypoints)
+#     # Create and compile the model
+#     model = create_model(input_shape, num_keypoints)
     
-    # Train the model
-    history = train_model(model, X_train, y_train, X_val, y_val)
+#     # Train the model
+#     history = train_model(model, X_train, y_train, X_val, y_val)
     
-    # Evaluate the trained model
-    test_loss, test_accuracy = model.evaluate(X_test, y_test)
-    print("Test Loss:", test_loss)
-    print("Test Accuracy:", test_accuracy)
+#     # Evaluate the trained model
+#     test_loss, test_accuracy = model.evaluate(X_test, y_test)
+#     print("Test Loss:", test_loss)
+#     print("Test Accuracy:", test_accuracy)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
             
 
 ##############################################################IMAGE DETECTION############################################################
