@@ -1,6 +1,16 @@
 import cv2 as cv #Computer Vision
 import matplotlib.pyplot as plt #Pyplot for pose detection
-
+import os
+path = 'dataset'
+images = []
+classNames = []
+myList = os.listdir(path)
+print(myList)
+for cl in myList:
+    curImg = cv.imread(f'{path}/{cl}')
+    images.append(curImg)
+    classNames.append(os.path.splitext(cl)[0])
+print(classNames)
 net = cv.dnn.readNetFromTensorflow("graph_opt.pb")
 
 inHeight = 368
