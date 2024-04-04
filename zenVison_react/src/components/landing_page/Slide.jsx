@@ -7,7 +7,7 @@ const Slide = () => {
         <div class="relative h-96 overflow-hidden rounded-lg md:h-96">
           <div class="hidden duration-900 ease-in-out" data-carousel-item>
             <img
-              src="src\assets\pic1.jpg"
+              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic1.jpg"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-20 left-1/2"
               alt="..."
             />
@@ -15,7 +15,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="src\assets\pic2.jpg"
+              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic2.jpg"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
@@ -23,7 +23,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="src\assets\pic3.jpg"
+              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic3.jpg"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
@@ -31,7 +31,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="src\assets\pic4.jpg"
+              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic4.jpg"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
@@ -39,7 +39,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="src\assets\pic5.jpg"
+              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic5.jpg"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
