@@ -7,7 +7,7 @@ const Slide = () => {
         <div class="relative h-96 overflow-hidden rounded-lg md:h-96">
           <div class="hidden duration-900 ease-in-out" data-carousel-item>
             <img
-              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic1.jpg"
+              src="https://images.pexels.com/photos/1375883/pexels-photo-1375883.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-20 left-1/2"
               alt="..."
             />
@@ -15,7 +15,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic2.jpg"
+              src="https://images.pexels.com/photos/2164026/pexels-photo-2164026.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
@@ -23,7 +23,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic3.jpg"
+              src="https://images.pexels.com/photos/4056723/pexels-photo-4056723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
@@ -31,7 +31,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic4.jpg"
+              src="https://images.pexels.com/photos/3756518/pexels-photo-3756518.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
@@ -39,7 +39,7 @@ const Slide = () => {
 
           <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img
-              src="https://github.com/VOID-001/ZenVision/blob/main/zenVison_react/src/assets/pic5.jpg"
+              src="https://images.pexels.com/photos/1472887/pexels-photo-1472887.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="..."
             />
