@@ -50,6 +50,6 @@ while True:
 		cap.release()
 		break
 
-
+print(X)
 np.save(f"{name}.npy", np.array(X))
 print(np.array(X).shape)
