@@ -8,37 +8,37 @@ mp_drawing = mp.solutions.drawing_utils #drawing utility, visualition of poses
 mp_pose = mp.solutions.pose #importing pose estimation model from mp
 
 
-# def calculate_angle(a,b,c):
-#     a = np.array(a) # First
-#     b = np.array(b) # Mid
-#     c = np.array(c) # End
+def calculateAngle(a,b,c):
+    a = np.array(a) # First
+    b = np.array(b) # Mid
+    c = np.array(c) # End
     
-#     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
-#     angle = np.abs(radians*180.0/np.pi)
+    radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
+    angle = np.abs(radians*180.0/np.pi)
     
-#     if angle > 180.0:
-#         angle = 360-angle
-        
-#     return angle 
-
-def calculateAngle(landmark1, landmark2, landmark3):
-
-    # Get the required landmarks coordinates.
-    x1, y1 = landmark1
-    x2, y2 = landmark2
-    x3, y3 = landmark3
- 
-    # Calculate the angle between the three points
-    angle = math.degrees(math.atan2(y3 - y2, x3 - x2) - math.atan2(y1 - y2, x1 - x2))
-    
-    # Check if the angle is less than zero.
     if angle < 0:
- 
-        # Add 360 to the found angle.
         angle += 360
+        
+    return angle 
+
+# def calculateAngle(landmark1, landmark2, landmark3):
+
+#     # Get the required landmarks coordinates.
+#     x1, y1 = landmark1
+#     x2, y2 = landmark2
+#     x3, y3 = landmark3
+ 
+#     # Calculate the angle between the three points
+#     angle = math.degrees(math.atan2(y3 - y2, x3 - x2) - math.atan2(y1 - y2, x1 - x2))
     
-    # Return the calculated angle.
-    return angle
+#     # Check if the angle is less than zero.
+#     if angle < 0:
+ 
+#         # Add 360 to the found angle.
+#         angle += 360
+    
+#     # Return the calculated angle.
+#     return angle
 
 
 cap = cv.VideoCapture(0)
@@ -69,7 +69,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             lw = calculateAngle(left_elbow, left_wrist, left_shoulder)
             cv.putText(image, str(lw), tuple(np.multiply(left_wrist, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
             #LEFT SHOULDER
-            ls = calculateAngle(left_wrist, left_shoulder, left_elbow)
+            ls = calculateAngle(left_elbow, left_shoulder, left_wrist)
             cv.putText(image, str(ls), tuple(np.multiply(left_shoulder, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
             #LEFT HIP
             lh = calculateAngle(left_ankle, left_hip, left_knee)
@@ -89,14 +89,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
             right_ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
             #RIGHT ELBOW
-            rs = calculateAngle(right_shoulder, right_elbow, right_wrist)
-            cv.putText(image, str(rs), tuple(np.multiply(right_elbow, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
+            re = calculateAngle(right_shoulder, right_elbow, right_wrist)
+            cv.putText(image, str(re), tuple(np.multiply(right_elbow, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
             #RIGHT WRIST
-            re = calculateAngle(right_elbow, right_wrist, right_shoulder)
-            cv.putText(image, str(re), tuple(np.multiply(right_wrist, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
+            rw = calculateAngle(right_elbow, right_wrist, right_shoulder)
+            cv.putText(image, str(rw), tuple(np.multiply(right_wrist, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
             #RIGHT SHOULDER
-            rw = calculateAngle(right_wrist, right_shoulder, right_elbow)
-            cv.putText(image, str(rw), tuple(np.multiply(right_shoulder, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
+            rs = calculateAngle(right_elbow, right_shoulder, right_wrist)
+            cv.putText(image, str(rs), tuple(np.multiply(right_shoulder, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
             #RIGHT HIP
             rh = calculateAngle(right_ankle, right_hip, right_knee)
             cv.putText(image, str(rh), tuple(np.multiply(right_hip, [640, 480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv.LINE_AA)
@@ -120,24 +120,30 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         cv.imshow("Yoga Detection System", image)
         
         #DETECTION
-        label = 'Unknown Pose'
+        ## TREE POSE ###
+        #Check if one leg is straight
+        if lk > 165 and lk < 195 or rk > 165 and rk < 195:
  
-    # Specify the color (Red) with which the label will be written on the image.
-        color = (0, 0, 255)
-        ### TREE POSE ###
-        # Check if one leg is straight
-        # if lk > 165 and lk < 195 or rk > 165 and rk < 195:
+        # Check if the other leg is bended at the required angle.
+            if lk > 50 and lk < 90 or rk > 50 and rk < 90:
  
-        # # Check if the other leg is bended at the required angle.
-        #     if lk > 50 and lk < 90 or rk > 50 and rk < 90:
+            # Specify the label of the pose that is tree pose.
+                print("Tree Pose")
+                label = 'Tree Pose'
+        
+        # ## T POSE ##
+        if le > 165 and le < 195 and re < 165 and re < 195:
  
-        #     # Specify the label of the pose that is tree pose.
-        #         print("Tree Pose")
-        #         label = 'Tree Pose'
+        # Check if shoulders are at the required angle.
+            if ls > 0 and ls < 20 and rs > 0 and rs > 20 :
+                         if lk > 160 and lk < 195 and rk > 160 and rk < 195:
+                             print("T Pose")
+                     
+
         ### WARRIOR II POSE ###
         if le > 165 and le < 195 and re > 165 and re < 195:
         # Check if shoulders are at the required angle.
-            if ls > 80 and ls < 110 and rs > 80 and rs < 110:
+            if ls > 0 and ls < 10 and rs > 0 and rs < 10:
             # Check if one leg is straight.
                 if lk > 165 and lk < 195 or rk > 165 and rk < 195:
                 # Check if the other leg is bended at the required angle.
@@ -147,15 +153,11 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 
         ### GODDESS POSE ###
         
-        # if ls > 35 and ls < 70 and rs > 35 and rs < 70:
-        #     if le > 70 and le < 100 and re > 70 and re < 100:
-        #         if lk > 115 and lk < 190 and rk > 115 and rk < 190:
-        #             print("Goddess Pose")
-        #             label = "Goddess Pose"
-        
-        
-        if label != 'Unknown Pose':
-            color = (0, 255, 0) 
+        if ls > 35 and ls < 70 and rs > 35 and rs < 70:
+            if le > 70 and le < 100 and re > 70 and re < 100:
+                if lk > 115 and lk < 190 and rk > 115 and rk < 190:
+                    print("Goddess Pose")
+                    label = "Goddess Pose"
         
         if cv.waitKey(10) & 0xFF == ord('q'): #Checks if Q is pressed to end the stream
             break
